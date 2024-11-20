@@ -1,0 +1,82 @@
+""" When Raspberry Pi turn on:
+- Get APIKEY (Manually send from Phosocon)
+
+Calibrate Light (Coordinating) 
+- Turn off all lights registered in the system. 
+- Turn on Light Bulb one.
+- Capture Picture
+- Forward picture and light id to the Cloud
+- When coordinates are saved in the cloud, Turn off all lights
+- Turn on Light bulb Two
+- Capture picture
+- Forward picture to Cloud and light ID
+- When coordinates are saved in the cloud. Turn off all lights. 
+- Turn on Light Bulb three
+- Captures picture
+- Forward picture and light ID to cloud
+Note to Janice: Tjek om du kan gennem gå alle light_id i listen, uafhængigt af hvor mange der er. 
+
+
+When all light bulb is calibrated:
+While system is on and calibration is true:
+- Set camera to take picture every ten seconds.
+- Forward picture to cloud.
+This is done until the system is turned off
+
+If commands received from cloud. 
+- Get command from cloud (mostly a Json request or something)
+    - Light ID and what to do with the light ID's
+- Send commands to lights
+If not, wait for it."""
+
+import time
+
+from config import DeconzAPI
+from lightbulb.light_control import Controller
+from lightbulb.lightbulbs import Lightbulb
+from camera.cameraS3 import capture_image_and_upload
+
+
+def main():
+    deconz = DeconzAPI(deconz_ip="172.28.176.1")
+    api_url = deconz.get_api_url()
+
+    # Turn off all lights registered in the system
+    for lights in Lightbulb.list_of_paired_lightbulbs(url=api_url):
+        Controller.turn_light_off(api_url, lights)
+    time.sleep(2)
+    
+    # Turn on the first light bulb and capture a picture
+    Controller.turn_light_on(api_url, 2)
+    # Capture picture
+    if capture_image_and_upload():
+        print("Picture captured and uploaded to the cloud.")
+    else:
+        print("Picture not captured and uploaded to the cloud.")
+    time.sleep(2)
+
+
+    # Forward picture and light ID to the cloud
+
+
+
+# Once Raspberry Pi is turned on, it will get the APIKEY from the user and turn off, when it is manually shut down.
+if __name__ == "__main__":
+    main()
+
+# The Raspberry Pi will then calibrate the light by turning off all lights registered in the system.
+# It will then turn on the first light bulb and capture a picture.
+# The picture and light ID will be forwarded to the cloud.
+# When the coordinates are saved in the cloud, all lights will be turned off.
+# The second light bulb will be turned on, and a picture will be captured.
+# The picture will be forwarded to the cloud along with the light ID.
+# When the coordinates are saved in the cloud, all lights will be turned off.
+# The third light bulb will be turned on, and a picture will be captured.
+# The picture and light ID will be forwarded to the cloud.
+# When the coordinates are saved in the cloud, all lights will be turned off.
+# The Raspberry Pi will then set the camera to take a picture every ten seconds and forward the picture to the cloud.
+# This will continue until the system is turned off.
+# If commands are received from the cloud, the Raspberry Pi will get the command from the cloud, which is mostly a JSON request.
+# The Raspberry Pi will get the light ID and what to do with the light IDs.
+# The Raspberry Pi will then send the commands to the lights.
+# If no commands are received, the Raspberry Pi will wait for it.

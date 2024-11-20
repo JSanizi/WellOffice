@@ -1,9 +1,9 @@
-import time
+"""import time
 import requests
 
 from config import DeconzAPI
-from lightbulb import Lightbulb
-from light_control import Controller
+from lightbulb.light_control import Controller
+from lightbulb.lightbulbs import Lightbulb
 
 def main():
     # Instantiate the DeconzAPI class with the IP address of your deCONZ device
@@ -20,4 +20,4 @@ def main():
         print("No lightbulbs found.")
 
 if __name__ == "__main__":
-    main()
+    main()"""

@@ -15,7 +15,7 @@ class DeconzAPI:
 
         if response.status_code == 200:
             self.api_key = response.json()[0]["success"]["username"]
-            print("API Key:", self.api_key)
+            # print("API Key:", self.api_key)
         else:
             print("Failed to get API Key:", response.json())
             self.api_key = None
@@ -38,5 +38,5 @@ class DeconzAPI:
                 print("Failed to retrieve the API URL. Retrying in 5 seconds...")
                 time.sleep(5)
             else:
-                print("API URL:", self.api_url)
+                #print("API URL:", self.api_url)
                 return self.api_url

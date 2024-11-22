@@ -2,7 +2,7 @@ import requests
 import time
 
 class DeconzAPI:
-    def __init__(self, deconz_ip, api_port="80"):
+    def __init__(self, deconz_ip, api_port="8080"):
         self.deconz_ip = deconz_ip
         self.api_port = api_port
         self.api_key = None

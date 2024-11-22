@@ -38,7 +38,7 @@ from camera.cameraS3 import capture_image_and_upload
 
 
 def main():
-    deconz = DeconzAPI(deconz_ip="172.28.176.1")
+    deconz = DeconzAPI(deconz_ip="172.30.212.135")
     api_url = deconz.get_api_url()
 
     # Turn off all lights registered in the system
@@ -46,14 +46,13 @@ def main():
         Controller.turn_light_off(api_url, lights)
     time.sleep(2)
     
-    # Turn on the first light bulb and capture a picture
-    Controller.turn_light_on(api_url, 2)
-    # Capture picture
-    if capture_image_and_upload():
-        print("Picture captured and uploaded to the cloud.")
-    else:
-        print("Picture not captured and uploaded to the cloud.")
-    time.sleep(2)
+    for lights in Lightbulb.list_of_paired_lightbulbs(url=api_url):
+        # Turn on the first light bulb and capture a picture
+        Controller.turn_light_on(api_url, lights)
+        # Capture picture
+        capture_image_and_upload()
+        Controller.turn_light_off(api_url,lights)
+        time.sleep(2)
 
 
     # Forward picture and light ID to the cloud

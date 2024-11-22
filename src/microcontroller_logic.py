@@ -54,12 +54,41 @@ def main():
         Controller.turn_light_off(api_url,lights)
         time.sleep(2)
 
+    print("Calibration done - Welloffice is now running")
 
-    # Forward picture and light ID to the cloud
+    while True:
+        # Set camera to take a picture every ten seconds and forward the picture to the cloud
+        capture_image_and_upload()
+        time.sleep(10)
 
+    # Raspberry Pi will receive message from the cloud.
+    # First we initiate which the light bulb that is closest, futhers and in the middle received from the cloud
+    futherst_light = "furtherest lightbulb: light_id"
+    closest_light = "closest lighbulb: light_id"
+    middle_light = "moddile lightbulb: light_id"
 
+    # We receive a message about the human activity in the room.
 
-# Once Raspberry Pi is turned on, it will get the APIKEY from the user and turn off, when it is manually shut down.
+    if message == "Person not in the room":
+        Controller.set_light_turn_on(api_url, lights)
+        Controller.set_light_brightness(api_url, lights, 15)
+    else:
+        Controller.set_light_turn_on(api_url, lights)
+        Controller.set_light_brightness(api_url, lights, 85)
+        Controller.set_light_temperature(api_url, lights, 3500)
+        if message == "Person is relaxed":
+            Controller-set_light_brightness(api_url, closest_light, 75)
+            Controller.set_light_brightness(api_url, futherst_light, 25)
+            Controller.set_light_brightness(api_url, middle_light, 25)
+            Controller.set_light_temperature(api_url, lights, 2700)
+        else:    
+            Controller.set_light_brightness(api_url, closest_lights, 100)
+            Controller.set_light_brightness(api_url, furtherst_lights, 40)
+            Controller.set_light_brightness(api_url, middle_lights, 40)
+            Controller.set_light_temperature(api_url, lights, 4300)
+ 
+    
+
 if __name__ == "__main__":
     main()
 

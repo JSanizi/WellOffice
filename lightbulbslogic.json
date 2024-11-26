@@ -13,9 +13,14 @@
             "y": 487
         }
     ],
-    "human_activity": "",
+    "human_activity": "default",
     "human_coordinates": {
-        "x": null,
-        "y": null
-    }
+        "x": 620,
+        "y": 427
+    },
+    "euclidian_lights": [
+        1,
+        2,
+        3
+    ]
 }

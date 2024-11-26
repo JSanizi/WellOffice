@@ -14,7 +14,7 @@ class Lightbulb:
 
         if response.status_code == 200:
             lights = response.json()
-            print("List of lights:", lights)
+            # print("List of lights:", lights)
             return lights
         else:
             print(f"Failed to discover lights: {response.status_code}")
@@ -32,7 +32,7 @@ def check_for_new_lights(self):
         if response.status_code == 200:
             lights = response.json()
             if lights:
-                print(f"Found lights: {lights}")
+                #print(f"Found lights: {lights}")
                 return lights  # Return the dictionary of found lights with their light IDs
             else:
                 print("No new lights found.")

@@ -9,7 +9,7 @@ class Controller:
     def turn_light_on(api_url, light_id):
         # Check if the light is already on
         if Controller.check_light_state(api_url, light_id):
-            print(f"Light {light_id} is already on.")
+            # print(f"Light {light_id} is already on.")
             return # Exit the function if the light is already on
         else:
             payload = {"on": True}  # Turn the light on
@@ -23,7 +23,7 @@ class Controller:
     def turn_light_off(api_url, light_id):
         # Check if the light is already off
         if Controller.check_light_state(api_url, light_id):
-            print(f"Light {light_id} is already off.")
+            # print(f"Light {light_id} is already off.")
             return # Exit the function if the light is already off
         else:
             payload = {"on": False}  # Turn the light off
@@ -81,7 +81,7 @@ class Controller:
         if response.status_code == 200:
             state = response.json()  # Parse the JSON response
             
-            # Extract the light's state
+            """# Extract the light's state
             is_on = state["state"]["on"]
             brightness = state["state"]["bri"]
             light_temperature = state["state"]["ct"]
@@ -93,6 +93,7 @@ class Controller:
                 print(f"Light {light_id} is OFF.")
             
             print(f"Brightness: {brightness} (0-254 scale)")
-            print(f"Light Temperature: {light_temperature} (Range: 153-500)")
+            print(f"Light Temperature: {light_temperature} (Range: 153-500)")"""
         else:
             print(f"Failed to retrieve state for light {light_id}: {response.status_code}")
+        

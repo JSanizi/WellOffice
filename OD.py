@@ -1,35 +1,92 @@
 from ultralytics import YOLO
-from PIL import Image
+from PIL import Image, ImageDraw
+import json
+import os
+from inference_sdk import InferenceHTTPClient
 
-model = YOLO("runs/detect/train43/weights/last.pt")
+# Function to annotate and save results
+def annotate_and_save(image_path, detections, output_image_path, output_json_path):
+    image = Image.open(image_path).convert("RGB")
+    draw = ImageDraw.Draw(image)
+    centers = []
 
-# model.tune(data="datasets/HAR/data.yaml", epochs=20, iterations=10, optimizer="AdamW", plots=False, val=False, imgsz=320)
+    for detection in detections:
+        x_min, y_min, x_max, y_max = detection
+        center_x = int((x_min + x_max) / 2)
+        center_y = int((y_min + y_max) / 2)
+        
+        # Draw bounding box
+        draw.rectangle([x_min, y_min, x_max, y_max], outline="red", width=3)
+        
+        # Draw center point
+        radius = 20
+        draw.ellipse(
+            (center_x - radius, center_y - radius, center_x + radius, center_y + radius),
+            fill="blue",
+            outline="blue",
+        )
 
+        centers.append({"center_x": center_x, "center_y": center_y})
 
-# results = model.train(data="datasets/HAR/data.yaml", epochs=20, batch=24, imgsz=320)
+    # Save the annotated image
+    image.save(output_image_path)
+    print(f"Saved annotated result to {output_image_path}")
 
-# metrics = model.val()  # no arguments needed, dataset and settings remembered
-# metrics.box.map  # map50-95
-# metrics.box.map50  # map50
-# metrics.box.map75  # map75
-# metrics.box.maps  # a list contains map50-95 of each category
+    # Save the center coordinates to a JSON file
+    with open(output_json_path, "w") as json_file:
+        json.dump(centers, json_file, indent=4)
+    print(f"Saved center coordinates to {output_json_path}")
 
+# YOLO model initialization
+yolo_model = YOLO("bestHAR.pt")
 
-image = Image.open("texting.jpg")
-new_image = image.resize((320, 320))
-new_image.save("texting320.jpg")
+# Inference client initialization
+client = InferenceHTTPClient(
+    api_url="https://detect.roboflow.com",
+    api_key="HBctR84K7sX66IDRBCCR"
+)
 
+# Image path
+input_image_path = "chuanleworkingtest.jpeg"
 
-results = model(["texting320.jpg","laptop4_320.jpg", "laptop5_320.jpg" ,"laptop6_320.jpg", "laptop1_320.jpg", "me2.jpg", "me3.jpg", "janice.jpg"])  # return a list of Results objects
+# Run YOLO inference
+yolo_results = yolo_model([input_image_path])
+yolo_detections = []
 
+for result in yolo_results:
+    if result.boxes is not None:
+        for box in result.boxes:
+            # Extract coordinates (xmin, ymin, xmax, ymax)
+            x_min, y_min, x_max, y_max = box.xyxy[0].tolist()
+            yolo_detections.append((x_min, y_min, x_max, y_max))
 
-# Process results list
-for result in results:
-    boxes = result.boxes  # Boxes object for bounding box outputs
-    masks = result.masks  # Masks object for segmentation masks outputs
-    keypoints = result.keypoints  # Keypoints object for pose outputs
-    probs = result.probs  # Probs object for classification outputs
-    obb = result.obb  # Oriented boxes object for OBB outputs
-    result.show()  # display to screen
-    result.save(filename="result.jpg")  # save to disk
+# Check if YOLO found any detections
+if yolo_detections:
+    print("YOLO detected objects.")
+    annotate_and_save(
+        input_image_path,
+        yolo_detections,
+        "human_model_result.jpg",
+        "human_model_result.json"
+    )
+else:
+    print("YOLO did not detect any objects. Falling back to second model.")
+    
+    # Run inference on the backup model
+    second_model_result = client.infer(input_image_path, model_id="person-detection-9a6mk/16")
+    
+    second_model_detections = []
+    for pred in second_model_result["predictions"]:
+        # Extract bounding box coordinates
+        x_min = pred["x"] - pred["width"] / 2
+        y_min = pred["y"] - pred["height"] / 2
+        x_max = pred["x"] + pred["width"] / 2
+        y_max = pred["y"] + pred["height"] / 2
+        second_model_detections.append((x_min, y_min, x_max, y_max))
 
+    annotate_and_save(
+        input_image_path,
+        second_model_detections,
+        "human_model_result.jpg",
+        "human_model_result.json"
+    )

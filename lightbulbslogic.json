@@ -1,0 +1,21 @@
+{
+    "light_bulbs": [
+        {
+            "x": 236,
+            "y": 630
+        },
+        {
+            "x": 1179,
+            "y": 514
+        },
+        {
+            "x": 1369,
+            "y": 487
+        }
+    ],
+    "human_activity": "",
+    "human_coordinates": {
+        "x": null,
+        "y": null
+    }
+}

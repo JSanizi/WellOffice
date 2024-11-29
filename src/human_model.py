@@ -24,10 +24,6 @@ def annotate_and_save(image_path, detections, output_image_path):
             outline="blue",
         )
 
-    # Save the annotated image
-    image.save(output_image_path)
-    print(f"Saved annotated result to {output_image_path}")
-
 # Function to update the JSON file
 def update_lightbulbs_logic(human_coordinates, activity):
     file_path = "lightbulbslogic.json"

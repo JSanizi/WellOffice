@@ -37,7 +37,7 @@ from lightbulb.lightbulbs import Lightbulb
 from camera.cameraS3 import capture_image_and_upload
 import lightbulbs_model as lb
 import human_model as har
-
+import euclidian_process as ep
 
 def main():
     json_path = "lightbulbslogic.json"
@@ -62,11 +62,17 @@ def main():
         time.sleep(2)
 
     print("Calibration done - Welloffice is now running")
+	
+    # Turn on all lights registered in the system
+    for light in lights:
+        Controller.turn_light_on(api_url, light)
+    time.sleep(2)
 
     while True:
         # Set camera to take a picture every ten seconds and forward the picture to the cloud
         human_image = capture_image_and_upload()
         har.human_inference(human_image)
+        ep.update_euclidean_order(json_path)
 
         try:
             with open(json_path, "r") as json_file:
@@ -77,33 +83,38 @@ def main():
                 "light_bulbs": [],
                 "human_activity": "",
                 "human_coordinates": {"x": None, "y": None},
-                "euclidian_lights": []
+                "closest_light": None,
+                "middle_light": None,
+                "furthest_light": None
             }
 
         human_activity = data["human_activity"]
-        human_coordinates = data["human_coordinates"]
-        euclidian_lights = data["euclidian_lights"]
-
-        for eucli_light in euclidian_lights:
-            print(eucli_light)
+        closest_light = data["closest_light"]
+        middle_light = data["middle_light"]
+        furthest_light = data["furthest_light"]
 
         if human_activity == "No human detected":
-            Controller.set_light_turn_on(api_url, lights)
-            Controller.set_light_brightness(api_url, lights, 15)
+            for light in lights:
+                Controller.turn_light_on(api_url, light)
+                Controller.set_light_brightness(api_url, light, 15)
         elif human_activity == "default":
-            Controller.set_light_turn_on(api_url, lights)
-            Controller.set_light_brightness(api_url, lights, 85)
-            Controller.set_light_temperature(api_url, lights, 3500)
+            for light in lights:
+                Controller.turn_light_on(api_url, light)
+                Controller.set_light_brightness(api_url, light, 85)
+                Controller.set_light_temperature(api_url, light, 3500)
             if human_activity == "relaxed":
-                # Controller.set_light_brightness(api_url, closest_light, 75)
-                # Controller.set_light_brightness(api_url, futherst_light, 25)
-                # Controller.set_light_brightness(api_url, middle_light, 25)
-                Controller.set_light_temperature(api_url, lights, 2700)
+                Controller.set_light_brightness(api_url, closest_light, 75)
+                Controller.set_light_brightness(api_url, furthest_light, 25)
+                Controller.set_light_brightness(api_url, middle_light, 25)
+                for light in lights:
+                    Controller.set_light_temperature(api_url, light, 2700)
+
             elif human_activity == "focused":    
-                # Controller.set_light_brightness(api_url, closest_lights, 100)
-                # Controller.set_light_brightness(api_url, furtherst_lights, 40)
-                # Controller.set_light_brightness(api_url, middle_lights, 40)
-                Controller.set_light_temperature(api_url, lights, 4300)
+                Controller.set_light_brightness(api_url, closest_light, 100)
+                Controller.set_light_brightness(api_url, furthest_light, 40)
+                Controller.set_light_brightness(api_url, middle_light, 40)
+                for light in lights:
+                    Controller.set_light_temperature(api_url, light, 4300)
             else:
                 print("The human activity is not default, relaxed or focused.")
         else:

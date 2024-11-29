@@ -20,7 +20,9 @@ except FileNotFoundError:
         "light_bulbs": [],
         "human_activity": "",
         "human_coordinates": {"x": None, "y": None},
-        "euclidian_lights": []
+        "closest_light": None,
+        "middle_light": None,
+        "furthest_light": None
     }
 
 def infere(inferedImage, lightID):

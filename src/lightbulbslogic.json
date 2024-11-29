@@ -1,0 +1,29 @@
+{
+    "light_bulbs": [
+        {
+            "x": 1020,
+            "y": 1725,
+            "ID": "1"
+        },
+        {
+            "x": 2576,
+            "y": 1961,
+            "ID": "2"
+        },
+        {
+            "x": 1863,
+            "y": 1802,
+            "ID": "3"
+        }
+    ],
+    "human_activity": "No human detected",
+    "human_coordinates": {
+        "x": null,
+        "y": null
+    },
+    "euclidian_lights": [
+        1,
+        2,
+        3
+    ]
+}

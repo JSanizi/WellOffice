@@ -21,3 +21,20 @@ def main():
 
 if __name__ == "__main__":
     main()"""
+
+
+# main(){
+    # Run lightbulb stuff (detect position coordinate lightbulbs, etc.)
+
+    # Run loop
+        # Every 10 seconds look for human activity
+        # If human activity
+            # Adjust lights
+        # If none found
+            # try to detect human
+            # If found
+                # Light = default
+            # If none found
+                # Light = 15%
+
+#}

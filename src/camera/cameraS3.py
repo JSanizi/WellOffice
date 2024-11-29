@@ -47,6 +47,8 @@ def capture_image_and_upload():
     myMQTTClient.publish(topic, json.dumps(message), 1)
     print("Published notification to AWS IoT Core")
 
+    return file_path
+
 """ try:
     while True:
         capture_image_and_upload()

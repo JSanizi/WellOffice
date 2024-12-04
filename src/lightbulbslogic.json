@@ -1,13 +1,13 @@
 {
     "light_bulbs": [
         {
-            "x": 236,
-            "y": 630,
+            "x": 1443,
+            "y": 1184,
             "ID": "1"
         },
         {
-            "x": 1179,
-            "y": 514,
+            "x": 1662,
+            "y": 1444,
             "ID": "2"
         },
         {
@@ -16,10 +16,10 @@
             "ID": "3"
         }
     ],
-    "human_activity": "default",
+    "human_activity": "No human detected",
     "human_coordinates": {
-        "x": 620,
-        "y": 427
+        "x": 2303,
+        "y": 1296
     },
     "closest_light": "1",
     "middle_light": "2",

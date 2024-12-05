@@ -96,6 +96,7 @@ def main():
         if human_activity == "No human detected":
             for light in lights:
                 Controller.turn_light_on(api_url, light)
+                Controller.set_light_temperature(api_url, light, 3500)
                 Controller.set_light_brightness(api_url, light, 15)
         elif human_activity == "default":
             for light in lights:

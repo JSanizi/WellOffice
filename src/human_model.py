@@ -63,14 +63,21 @@ def human_inference(aux_image):
     yolo_results = yolo_model([input_image_path])
     yolo_detections = []
     activity = None
+    highest_confidence = 0
 
     for result in yolo_results:
         if result.boxes is not None:
             for box in result.boxes:
                 # Extract coordinates (xmin, ymin, xmax, ymax) and activity
                 x_min, y_min, x_max, y_max = box.xyxy[0].tolist()
+                confidence = box.conf.tolist()[0]
+                detected_activity = box.cls.tolist()[0]
+
                 yolo_detections.append((x_min, y_min, x_max, y_max))
-                activity = box.cls  # Activity label predicted by YOLO
+
+                if confidence > highest_confidence:
+                    highest_confidence = confidence
+                    activity = detected_activity # Activity label predicted by YOLO
 
     # Check if YOLO found any detections
     if yolo_detections:

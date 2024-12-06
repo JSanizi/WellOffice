@@ -41,7 +41,7 @@ import euclidian_process as ep
 
 def main():
     json_path = "lightbulbslogic.json"
-    deconz = DeconzAPI(deconz_ip="192.168.43.40")
+    deconz = DeconzAPI(deconz_ip="172.30.213.103")
     api_url = deconz.get_api_url()
     lights = Lightbulb.list_of_paired_lightbulbs(url=api_url)
 

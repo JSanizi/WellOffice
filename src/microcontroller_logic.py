@@ -53,6 +53,8 @@ def main():
     for light in lights:
         # Turn on the first light bulb and capture a picture
         Controller.turn_light_on(api_url, light)
+        Controller.set_light_brightness(api_url, light, 100)
+        Controller.set_light_temperature(api_url, light, 3500)
         # Capture picture
         auxImage = capture_image_and_upload()
         # detect light bulb that's on
@@ -103,21 +105,18 @@ def main():
                 Controller.turn_light_on(api_url, light)
                 Controller.set_light_brightness(api_url, light, 85)
                 Controller.set_light_temperature(api_url, light, 3500)
-            if human_activity == "relaxed":
-                Controller.set_light_brightness(api_url, closest_light, 75)
-                Controller.set_light_brightness(api_url, furthest_light, 25)
-                Controller.set_light_brightness(api_url, middle_light, 25)
-                for light in lights:
-                    Controller.set_light_temperature(api_url, light, 2700)
-
-            elif human_activity == "focused":    
-                Controller.set_light_brightness(api_url, closest_light, 100)
-                Controller.set_light_brightness(api_url, furthest_light, 40)
-                Controller.set_light_brightness(api_url, middle_light, 40)
-                for light in lights:
-                    Controller.set_light_temperature(api_url, light, 4300)
-            else:
-                print("The human activity is not default, relaxed or focused.")
+        elif human_activity == "relaxed":
+            Controller.set_light_brightness(api_url, closest_light, 75)
+            Controller.set_light_brightness(api_url, furthest_light, 25)
+            Controller.set_light_brightness(api_url, middle_light, 25)
+            for light in lights:
+                Controller.set_light_temperature(api_url, light, 2700)
+        elif human_activity == "focused":    
+            Controller.set_light_brightness(api_url, closest_light, 100)
+            Controller.set_light_brightness(api_url, furthest_light, 40)
+            Controller.set_light_brightness(api_url, middle_light, 40)
+            for light in lights:
+                Controller.set_light_temperature(api_url, light, 4300)
         else:
             print("The human activity is not recognized.")
 

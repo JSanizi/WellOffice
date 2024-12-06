@@ -44,11 +44,12 @@ def update_lightbulbs_logic(human_coordinates, activity):
         "sleeping": "relaxed",
         "texting": "focused",
         "using_laptop": "focused",
-        "default": "default"
+        "default": "default",
+        "No human detected": "No human detected"
     }
 
     # Update human_activity
-    data["human_activity"] = activity_mapping.get(activity, "No human detected")
+    data["human_activity"] = activity
 
     # Write updated data back to the file
     with open(file_path, "w") as file:

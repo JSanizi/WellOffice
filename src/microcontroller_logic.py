@@ -41,7 +41,7 @@ import euclidian_process as ep
 
 def main():
     json_path = "lightbulbslogic.json"
-    deconz = DeconzAPI(deconz_ip="172.30.213.103")
+    deconz = DeconzAPI(deconz_ip="192.168.43.40")
     api_url = deconz.get_api_url()
     lights = Lightbulb.list_of_paired_lightbulbs(url=api_url)
 
@@ -80,7 +80,7 @@ def main():
             with open(json_path, "r") as json_file:
                 data = json.load(json_file)
         except FileNotFoundError:
-            print("Archivo JSON no encontrado. Creando uno nuevo.")
+            print("JSON file was not found. Creating a new one.")
             data = {
                 "light_bulbs": [],
                 "human_activity": "",

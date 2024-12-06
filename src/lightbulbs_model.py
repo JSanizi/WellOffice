@@ -10,7 +10,7 @@ CLIENT = InferenceHTTPClient(
 )
 
 # Path of the JSON file
-json_path = "lightbulbslogic.json"
+json_path = "/home/group4/Desktop/P5_Prototype1/src/lightbulbslogic.json"
 try:
     with open(json_path, "r") as json_file:
         data = json.load(json_file)

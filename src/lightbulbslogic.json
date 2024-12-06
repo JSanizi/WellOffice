@@ -1,11 +1,27 @@
 {
-    "light_bulbs": [],
-    "human_activity": "",
+    "light_bulbs": [
+        {
+            "x": 2934,
+            "y": 1555,
+            "ID": "1"
+        },
+        {
+            "x": 1170,
+            "y": 1570,
+            "ID": "3"
+        },
+        {
+            "x": 2247,
+            "y": 1553,
+            "ID": "2"
+        }
+    ],
+    "human_activity": "default",
     "human_coordinates": {
-        "x": null,
-        "y": null
+        "x": 4468,
+        "y": 1583
     },
-    "closest_light": "",
-    "middle_light": "",
-    "furthest_light": ""
+    "closest_light": "1",
+    "middle_light": "2",
+    "furthest_light": "3"
 }

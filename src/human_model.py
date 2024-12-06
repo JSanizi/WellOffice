@@ -38,7 +38,7 @@ def annotate_and_save(image_path, detections, output_image_path):
 
 # Function to update the JSON file
 def update_lightbulbs_logic(human_coordinates, activity):
-    file_path = "lightbulbslogic.json"
+    file_path = "/home/group4/Desktop/P5_Prototype1/src/lightbulbslogic.json"
 
     # Read the current JSON data
     with open(file_path, "r") as file:
@@ -145,7 +145,7 @@ def human_inference(aux_image):
     update_lightbulbs_logic(human_center, activity)
 
 # YOLO model initialization
-yolo_model = YOLO("bestHAR.pt")
+yolo_model = YOLO("/home/group4/Desktop/P5_Prototype1/src/bestHAR.pt")
 
 # Inference client initialization
 client = InferenceHTTPClient(

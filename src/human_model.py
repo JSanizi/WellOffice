@@ -152,5 +152,3 @@ client = InferenceHTTPClient(
     api_url="https://detect.roboflow.com",
     api_key="HBctR84K7sX66IDRBCCR"
 )
-
-human_inference("lightson.jpeg")

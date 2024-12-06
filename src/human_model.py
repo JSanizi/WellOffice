@@ -49,7 +49,9 @@ def update_lightbulbs_logic(human_coordinates, activity):
     }
 
     # Update human_activity
-    data["human_activity"] = activity
+    human_activity = activity_mapping.get(activity)
+
+    data["human_activity"] = human_activity
 
     # Write updated data back to the file
     with open(file_path, "w") as file:

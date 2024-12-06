@@ -106,15 +106,15 @@ def main():
                 Controller.set_light_brightness(api_url, light, 85)
                 Controller.set_light_temperature(api_url, light, 3500)
         elif human_activity == "relaxed":
-            Controller.set_light_brightness(api_url, closest_light, 75)
+            Controller.set_light_brightness(api_url, closest_light, 85)
             Controller.set_light_brightness(api_url, furthest_light, 25)
-            Controller.set_light_brightness(api_url, middle_light, 25)
+            Controller.set_light_brightness(api_url, middle_light, 15)
             for light in lights:
                 Controller.set_light_temperature(api_url, light, 2700)
         elif human_activity == "focused":    
             Controller.set_light_brightness(api_url, closest_light, 100)
-            Controller.set_light_brightness(api_url, furthest_light, 40)
-            Controller.set_light_brightness(api_url, middle_light, 40)
+            Controller.set_light_brightness(api_url, furthest_light, 30)
+            Controller.set_light_brightness(api_url, middle_light, 15)
             for light in lights:
                 Controller.set_light_temperature(api_url, light, 4300)
         else:

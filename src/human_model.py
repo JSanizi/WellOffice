@@ -3,6 +3,18 @@ from ultralytics import YOLO
 from PIL import Image, ImageDraw
 from inference_sdk import InferenceHTTPClient
 
+# Dictionary to map the numeric activity labels to human-readable strings
+ACTIVITY_MAP = {
+    0.0: "calling",
+    1.0: "eating",
+    2.0: "siting",
+    3.0: "sleeping",
+    4.0: "texting",
+    5.0: "using_laptop",
+    "default": "default",
+    "No human detected": "No human detected"
+}
+
 # Function to annotate and save results
 def annotate_and_save(image_path, detections, output_image_path):
     image = Image.open(image_path).convert("RGB")
@@ -36,20 +48,18 @@ def update_lightbulbs_logic(human_coordinates, activity):
     data["human_coordinates"]["x"] = human_coordinates["x"]
     data["human_coordinates"]["y"] = human_coordinates["y"]
 
-    # Map activity to the corresponding state
-    activity_mapping = {
-        "calling": "focused",
-        "eating": "relaxed",
-        "sitting": "relaxed",
-        "sleeping": "relaxed",
-        "texting": "focused",
-        "using_laptop": "focused",
-        "default": "default",
-        "No human detected": "No human detected"
-    }
+    # Convert numerical activity to string using ACTIVITY_MAP
+    activity_label = ACTIVITY_MAP.get(activity)  # Default to "No human detected" if not in the map
+    human_activity = ""
 
-    # Update human_activity
-    human_activity = activity_mapping.get(activity)
+    if "calling" in activity_label or "texting" in activity_label or "using_laptop" in activity_label:
+        human_activity = "focused"
+    elif "eating" in activity_label or "siting" in activity_label or "sleeping" in activity_label:
+        human_activity = "relaxed"
+    elif "default" in activity_label:
+        human_activity = "default"
+    else:
+        human_activity = "No human detected"
 
     data["human_activity"] = human_activity
 
@@ -142,3 +152,5 @@ client = InferenceHTTPClient(
     api_url="https://detect.roboflow.com",
     api_key="HBctR84K7sX66IDRBCCR"
 )
+
+human_inference("lightson.jpeg")

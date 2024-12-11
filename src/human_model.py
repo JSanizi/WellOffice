@@ -94,7 +94,7 @@ def human_inference(aux_image):
 
     # Check if YOLO found any detections
     if yolo_detections:
-        print("YOLO detected objects." + yolo_detections)
+        print("YOLO detected objects." + yolo_detections[0])
         annotate_and_save(
             input_image_path,
             yolo_detections,
@@ -122,7 +122,7 @@ def human_inference(aux_image):
             second_model_detections.append((x_min, y_min, x_max, y_max))
 
         if second_model_detections:
-            print("Second model detection: " + second_model_detections)
+            print("Second model detection: " + second_model_detections[0])
             annotate_and_save(
                 input_image_path,
                 second_model_detections,

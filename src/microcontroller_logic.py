@@ -120,53 +120,10 @@ def main():
         else:
             print("The human activity is not recognized.")
 
-        time.sleep(10)
+        time.sleep(5)
 
  
     
 
 if __name__ == "__main__":
     main()
-
-# The Raspberry Pi will then calibrate the light by turning off all lights registered in the system.
-# It will then turn on the first light bulb and capture a picture.
-# The picture and light ID will be forwarded to the cloud.
-# When the coordinates are saved in the cloud, all lights will be turned off.
-# The second light bulb will be turned on, and a picture will be captured.
-# The picture will be forwarded to the cloud along with the light ID.
-# When the coordinates are saved in the cloud, all lights will be turned off.
-# The third light bulb will be turned on, and a picture will be captured.
-# The picture and light ID will be forwarded to the cloud.
-# When the coordinates are saved in the cloud, all lights will be turned off.
-# The Raspberry Pi will then set the camera to take a picture every ten seconds and forward the picture to the cloud.
-# This will continue until the system is turned off.
-# If commands are received from the cloud, the Raspberry Pi will get the command from the cloud, which is mostly a JSON request.
-# The Raspberry Pi will get the light ID and what to do with the light IDs.
-# The Raspberry Pi will then send the commands to the lights.
-# If no commands are received, the Raspberry Pi will wait for it.
-
-    # Raspberry Pi will receive message from the cloud.
-    # First we initiate which the light bulb that is closest, futhers and in the middle received from the cloud
-    # furthest_light = "furthest lightbulb: light_id"
-    # closest_light = "closest lighbulb: light_id"
-    # middle_light = "moddile lightbulb: light_id"
-
-    # # We receive a message about the human activity in the room.
-
-    # if message == "Person not in the room":
-    #     Controller.set_light_turn_on(api_url, lights)
-    #     Controller.set_light_brightness(api_url, lights, 15)
-    # else:
-    #     Controller.set_light_turn_on(api_url, lights)
-    #     Controller.set_light_brightness(api_url, lights, 85)
-    #     Controller.set_light_temperature(api_url, lights, 3500)
-    #     if message == "Person is relaxed":
-    #         Controller-set_light_brightness(api_url, closest_light, 75)
-    #         Controller.set_light_brightness(api_url, futherst_light, 25)
-    #         Controller.set_light_brightness(api_url, middle_light, 25)
-    #         Controller.set_light_temperature(api_url, lights, 2700)
-    #     else:    
-    #         Controller.set_light_brightness(api_url, closest_lights, 100)
-    #         Controller.set_light_brightness(api_url, furtherst_lights, 40)
-    #         Controller.set_light_brightness(api_url, middle_lights, 40)
-    #         Controller.set_light_temperature(api_url, lights, 4300)

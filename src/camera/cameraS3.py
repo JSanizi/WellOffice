@@ -26,7 +26,7 @@ def capture_image_and_upload():
 
     myMQTTClient.configureOfflinePublishQueueing(-1)
     myMQTTClient.configureDrainingFrequency(2)
-    myMQTTClient.configureConnectDisconnectTimeout(20)
+    myMQTTClient.configureConnectDisconnectTimeout(30)
     myMQTTClient.configureMQTTOperationTimeout(10)
     print('Initiating Realtime Data Transfer From Raspberry Pi')
 

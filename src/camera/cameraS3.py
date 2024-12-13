@@ -28,8 +28,8 @@ def capture_image_and_upload():
     try:
         myMQTTClient.configureOfflinePublishQueueing(-1)
         myMQTTClient.configureDrainingFrequency(2)
-        myMQTTClient.configureConnectDisconnectTimeout(30)
-        myMQTTClient.configureMQTTOperationTimeout(20)
+        myMQTTClient.configureConnectDisconnectTimeout(10)
+        myMQTTClient.configureMQTTOperationTimeout(5)
         print('Initiating Realtime Data Transfer From Raspberry Pi')
 
         s3_client = boto3.client('s3')

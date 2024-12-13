@@ -52,6 +52,8 @@ def main():
         Controller.turn_light_on(api_url, light)
     time.sleep(2)
 
+    no_human_count = 0  # Counter for unrecognized human activity
+
     while True:
         # Set camera to take a picture every ten seconds and forward the picture to the cloud
         human_image = capture_image_and_upload()
@@ -101,6 +103,29 @@ def main():
                 Controller.set_light_temperature(api_url, light, 4300)
         else:
             print("The human activity is not recognized.")
+            no_human_count += 1
+            if no_human_count >= 3:
+                print("No human detected 3 times. Turning off all lights.")
+                for light in lights:
+                    Controller.turn_light_off(api_url, light)
+                
+                # Wait until a human is detected
+                while human_activity == "No human detected" or human_activity == "":
+                    human_image = capture_image_and_upload()
+                    har.human_inference(human_image)
+                    ep.update_euclidean_order(json_path)
+                    try:
+                        with open(json_path, "r") as json_file:
+                            data = json.load(json_file)
+                            human_activity = data["human_activity"]
+                    except FileNotFoundError:
+                        human_activity = ""
+                    time.sleep(5)
+
+                print("Human detected. Turning on all lights.")
+                for light in lights:
+                    Controller.turn_light_on(api_url, light)
+                no_human_count = 0  # Reset the counter
 
         time.sleep(5)
 

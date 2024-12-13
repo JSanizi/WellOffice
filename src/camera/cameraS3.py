@@ -24,22 +24,25 @@ def capture_image_and_upload():
                                     "/home/group4/certs/private.pem.key",
                                     "/home/group4/certs/certificate.pem.crt")
 
-    myMQTTClient.configureOfflinePublishQueueing(-1)
-    myMQTTClient.configureDrainingFrequency(2)
-    myMQTTClient.configureConnectDisconnectTimeout(30)
-    myMQTTClient.configureMQTTOperationTimeout(20)
-    print('Initiating Realtime Data Transfer From Raspberry Pi')
+    try:
+        myMQTTClient.configureOfflinePublishQueueing(-1)
+        myMQTTClient.configureDrainingFrequency(2)
+        myMQTTClient.configureConnectDisconnectTimeout(30)
+        myMQTTClient.configureMQTTOperationTimeout(20)
+        print('Initiating Realtime Data Transfer From Raspberry Pi')
 
-    s3_client = boto3.client('s3')
-    s3_bucket = "myiotimagesbucket"
+        s3_client = boto3.client('s3')
+        s3_bucket = "myiotimagesbucket"
 
-    topic = "images/notifications"
+        topic = "images/notifications"
 
-    myMQTTClient.connect()
-    print("Connected to AWS IoT Core")
+        myMQTTClient.connect()
+        print("Connected to AWS IoT Core")
 
-    local_storage = "/home/group4/images"
-    retention_time = timedelta(minutes=30)
+        local_storage = "/home/group4/images"
+        retention_time = timedelta(minutes=30)
+    except:
+        print("Connection Failed. Image not sent.")
 
     while True:
         try:

@@ -23,6 +23,7 @@ def capture_image_and_upload():
     myMQTTClient.configureCredentials("/home/group4/certs/AmazonRootCA1.pem", 
                                     "/home/group4/certs/private.pem.key",
                                     "/home/group4/certs/certificate.pem.crt")
+    local_storage = "/home/group4/images"
 
     try:
         myMQTTClient.configureOfflinePublishQueueing(-1)
@@ -39,37 +40,36 @@ def capture_image_and_upload():
         myMQTTClient.connect()
         print("Connected to AWS IoT Core")
 
-        local_storage = "/home/group4/images"
         retention_time = timedelta(minutes=30)
     except:
         print("Connection Failed. Image not sent.")
 
     while True:
-        try:
 
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             file_path = f"{local_storage}/image_{timestamp}.jpg"
+            try:
 
-            subprocess.run(["libcamera-still", "-o", file_path])
-            print(f"Image saved to {file_path}")
+                subprocess.run(["libcamera-still", "-o", file_path])
+                print(f"Image saved to {file_path}")
 
-            s3_key = f"images/photo_{timestamp}.jpg"
-            s3_client.upload_file(file_path, s3_bucket, s3_key)
-            print(f"Uploaded {file_path} to S3 as {s3_key}")
+                s3_key = f"images/photo_{timestamp}.jpg"
+                s3_client.upload_file(file_path, s3_bucket, s3_key)
+                print(f"Uploaded {file_path} to S3 as {s3_key}")
 
-            message = {"bucket": s3_bucket,
-                    "key": s3_key,
-                    "timestamp": timestamp}
-            
-            myMQTTClient.publish(topic, json.dumps(message), 1)
-            print("Published notification to AWS IoT Core")
+                message = {"bucket": s3_bucket,
+                        "key": s3_key,
+                        "timestamp": timestamp}
+                
+                myMQTTClient.publish(topic, json.dumps(message), 1)
+                print("Published notification to AWS IoT Core")
 
-            delete_expired_local_image(local_storage, retention_time)
+                delete_expired_local_image(local_storage, retention_time)
+            except Exception as e:
+                print(f"Error:{e}")
 
             return file_path
 
-        except Exception as e:
-            print(f"Error:{e}")
 """ try:
     while True:
         capture_image_and_upload()

@@ -84,48 +84,37 @@ def main():
                 Controller.turn_light_on(api_url, light)
                 Controller.set_light_temperature(api_url, light, 3500)
                 Controller.set_light_brightness(api_url, light, 15)
+
+            no_human_count += 1
+            if no_human_count >= 2:
+                print("No human detected 2 times. Turning off all lights.")
+                for light in lights:
+                    Controller.turn_light_off(api_url, light)
         elif human_activity == "default":
             for light in lights:
                 Controller.turn_light_on(api_url, light)
                 Controller.set_light_brightness(api_url, light, 85)
                 Controller.set_light_temperature(api_url, light, 3500)
+
+            no_human_count = 0
         elif human_activity == "relaxed":
             Controller.set_light_brightness(api_url, closest_light, 85)
             Controller.set_light_brightness(api_url, furthest_light, 25)
             Controller.set_light_brightness(api_url, middle_light, 15)
             for light in lights:
                 Controller.set_light_temperature(api_url, light, 2700)
+            
+            no_human_count = 0
         elif human_activity == "focused":    
             Controller.set_light_brightness(api_url, closest_light, 100)
             Controller.set_light_brightness(api_url, furthest_light, 30)
             Controller.set_light_brightness(api_url, middle_light, 15)
             for light in lights:
                 Controller.set_light_temperature(api_url, light, 4300)
+            
+            no_human_count = 0
         else:
             print("The human activity is not recognized.")
-            no_human_count += 1
-            if no_human_count >= 3:
-                print("No human detected 3 times. Turning off all lights.")
-                for light in lights:
-                    Controller.turn_light_off(api_url, light)
-                
-                # Wait until a human is detected
-                while human_activity == "No human detected" or human_activity == "":
-                    human_image = capture_image_and_upload()
-                    har.human_inference(human_image)
-                    ep.update_euclidean_order(json_path)
-                    try:
-                        with open(json_path, "r") as json_file:
-                            data = json.load(json_file)
-                            human_activity = data["human_activity"]
-                    except FileNotFoundError:
-                        human_activity = ""
-                    time.sleep(5)
-
-                print("Human detected. Turning on all lights.")
-                for light in lights:
-                    Controller.turn_light_on(api_url, light)
-                no_human_count = 0  # Reset the counter
 
         time.sleep(5)
 

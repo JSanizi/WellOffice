@@ -103,5 +103,3 @@ def infere(inferedImage, lightID):
         else:
             print("No results were returned.")
             return False  # No results
-
-infere("lightbulb1on.jpeg", 1)

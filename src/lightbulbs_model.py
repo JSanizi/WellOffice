@@ -39,6 +39,7 @@ def infere(inferedImage, lightID):
     else:
         if result:
             predictions = result.get("predictions", [])
+            detected_on = False
 
             if predictions:
                 # Iterate over the predictions
@@ -50,34 +51,30 @@ def infere(inferedImage, lightID):
                     class_name = pred.get("class")
                     confidence = pred.get("confidence")
 
-                    # Print the detection details
-                    print(f"Detection {i + 1}:")
-                    print(f"  Coordinates: (x={x}, y={y})")
-                    print(f"  Size: (width={width}, height={height})")
-                    print(f"  Class Name: {class_name}")
-                    print(f"  Confidence: {confidence:.2f}")
+                    print(f"Detection {i + 1}: {class_name} (confidence: {confidence:.2f})")
 
-                    # If the class is "lightbulbOn", add to the JSON
-                    if class_name == "lightbulbOn":
-                        # Verify if the light bulb is already in the JSON
-                        existing_light = next((light for light in data["light_bulbs"] if light["ID"] == lightID), None)
+                    # Process lightbulb detections
+                    if class_name in ["lightbulbOn", "lightbulbOff"]:
+                        # Check if the lightbulb already exists in the JSON
+                        existing_light = next(
+                            (light for light in data["light_bulbs"] if light["ID"] == lightID), None
+                        )
 
                         if existing_light:
-                            # If the light bulb is already in the JSON, update only its coordinates
+                            # Update coordinates only
                             existing_light["x"] = x
                             existing_light["y"] = y
                             print(f"Updating the JSON: {existing_light}")
                         else:
-                            if len(data["light_bulbs"]) >= 3:
-                                print(f"There are only 3 light bulbs allowed.")
-                            else:
-                                # If the light bulb is not in the JSON, add it
+                            if len(data["light_bulbs"]) < 3:
+                                # Add new lightbulb to JSON
                                 new_lightbulb = {"x": x, "y": y, "ID": lightID}
-                                # Add the new light bulb to the JSON
                                 data["light_bulbs"].append(new_lightbulb)
-                                print(f"Adding to JSON: {new_lightbulb}")
+                                print(f"Added lightbulb to JSON: {new_lightbulb}")
                         
-                        return True  # Detection succeeded
+                    # Detect lightbulbOn
+                    if class_name == "lightbulbOn":
+                        detected_on = True
 
                     # Draw a rectangle around the detected object
                     top_left = (x - width // 2, y - height // 2)
@@ -95,8 +92,8 @@ def infere(inferedImage, lightID):
                 with open(json_path, "w") as json_file:
                     json.dump(data, json_file, indent=4)
                 print(f"JSON updated stored in: {json_path}")
-            else:
-                print("No predictions were found.")
+
+                return detected_on
             
             print("No 'lightbulbOn' detected in predictions.")
             return False  # No valid predictions

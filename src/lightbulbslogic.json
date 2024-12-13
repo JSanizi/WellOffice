@@ -1,9 +1,9 @@
 {
     "light_bulbs": [],
-    "human_activity": "default",
+    "human_activity": "",
     "human_coordinates": {
-        "x": 900,
-        "y": 1557
+        "x": null,
+        "y": null
     },
     "closest_light": "",
     "middle_light": "",

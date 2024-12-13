@@ -20,7 +20,8 @@ def main():
     time.sleep(2)
     
     for light in lights:
-        while True:  # Keep trying until the class 'lightbulbOn' is detected
+        detected = False
+        while not detected:  # Retry until 'lightbulbOn' is detected
             # Turn on the first light bulb and capture a picture
             Controller.turn_light_on(api_url, light)
             Controller.set_light_brightness(api_url, light, 100)
@@ -36,9 +37,9 @@ def main():
             if light_detected:  # Modify infere to return a boolean
                 break  # Exit the retry loop and move to the next light bulb
             
-            # Otherwise, keep retrying
-            print("Retrying detection for this light bulb...")
-            time.sleep(2)
+            if not detected:
+                print("No 'lightbulbOn' detected. Retrying...")
+                time.sleep(2)
         
         # Turn off the current light bulb before moving to the next
         Controller.turn_light_off(api_url, light)

@@ -10,7 +10,7 @@ CLIENT = InferenceHTTPClient(
 )
 
 # Path of the JSON file
-json_path = "/home/group4/Desktop/P5_Prototype1/src/lightbulbslogic.json"
+json_path = "lightbulbslogic.json"
 try:
     with open(json_path, "r") as json_file:
         data = json.load(json_file)
@@ -35,6 +35,7 @@ def infere(inferedImage, lightID):
     # Check if the image was loaded correctly
     if image is None:
         print("The image was not loaded.")
+        return False
     else:
         if result:
             predictions = result.get("predictions", [])
@@ -75,6 +76,8 @@ def infere(inferedImage, lightID):
                                 # Add the new light bulb to the JSON
                                 data["light_bulbs"].append(new_lightbulb)
                                 print(f"Adding to JSON: {new_lightbulb}")
+                        
+                        return True  # Detection succeeded
 
                     # Draw a rectangle around the detected object
                     top_left = (x - width // 2, y - height // 2)
@@ -94,5 +97,11 @@ def infere(inferedImage, lightID):
                 print(f"JSON updated stored in: {json_path}")
             else:
                 print("No predictions were found.")
+            
+            print("No 'lightbulbOn' detected in predictions.")
+            return False  # No valid predictions
         else:
             print("No results were returned.")
+            return False  # No results
+
+infere("lightbulb1on.jpeg", 1)

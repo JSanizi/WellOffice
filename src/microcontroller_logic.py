@@ -1,34 +1,3 @@
-""" When Raspberry Pi turn on:
-- Get APIKEY (Manually send from Phosocon)
-
-Calibrate Light (Coordinating) 
-- Turn off all lights registered in the system. 
-- Turn on Light Bulb one.
-- Capture Picture
-- Forward picture and light id to the Cloud
-- When coordinates are saved in the cloud, Turn off all lights
-- Turn on Light bulb Two
-- Capture picture
-- Forward picture to Cloud and light ID
-- When coordinates are saved in the cloud. Turn off all lights. 
-- Turn on Light Bulb three
-- Captures picture
-- Forward picture and light ID to cloud
-Note to Janice: Tjek om du kan gennem gå alle light_id i listen, uafhængigt af hvor mange der er. 
-
-
-When all light bulb is calibrated:
-While system is on and calibration is true:
-- Set camera to take picture every ten seconds.
-- Forward picture to cloud.
-This is done until the system is turned off
-
-If commands received from cloud. 
-- Get command from cloud (mostly a Json request or something)
-    - Light ID and what to do with the light ID's
-- Send commands to lights
-If not, wait for it."""
-
 import time
 import json
 from config import DeconzAPI
@@ -51,16 +20,28 @@ def main():
     time.sleep(2)
     
     for light in lights:
-        # Turn on the first light bulb and capture a picture
-        Controller.turn_light_on(api_url, light)
-        Controller.set_light_brightness(api_url, light, 100)
-        Controller.set_light_temperature(api_url, light, 3500)
-        # Capture picture
-        auxImage = capture_image_and_upload()
-        # detect light bulb that's on
-        lb.infere(auxImage, light)
-
-        Controller.turn_light_off(api_url,light)
+        while True:  # Keep trying until the class 'lightbulbOn' is detected
+            # Turn on the first light bulb and capture a picture
+            Controller.turn_light_on(api_url, light)
+            Controller.set_light_brightness(api_url, light, 100)
+            Controller.set_light_temperature(api_url, light, 3500)
+            
+            # Capture picture
+            auxImage = capture_image_and_upload()
+            
+            # Detect light bulb that's on
+            light_detected = lb.infere(auxImage, light)
+            
+            # If a lightbulb with the class 'lightbulbOn' is detected, move to the next light
+            if light_detected:  # Modify infere to return a boolean
+                break  # Exit the retry loop and move to the next light bulb
+            
+            # Otherwise, keep retrying
+            print("Retrying detection for this light bulb...")
+            time.sleep(2)
+        
+        # Turn off the current light bulb before moving to the next
+        Controller.turn_light_off(api_url, light)
         time.sleep(2)
 
     print("Calibration done - Welloffice is now running")

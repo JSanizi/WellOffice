@@ -102,6 +102,7 @@ def main():
             Controller.set_light_brightness(api_url, furthest_light, 25)
             Controller.set_light_brightness(api_url, middle_light, 15)
             for light in lights:
+		Controller.turn_light_on(api_url, light)
                 Controller.set_light_temperature(api_url, light, 2700)
             
             no_human_count = 0
@@ -110,6 +111,7 @@ def main():
             Controller.set_light_brightness(api_url, furthest_light, 30)
             Controller.set_light_brightness(api_url, middle_light, 15)
             for light in lights:
+		Controller.turn_light_on(api_url, light)
                 Controller.set_light_temperature(api_url, light, 4300)
             
             no_human_count = 0
